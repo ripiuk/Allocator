@@ -6,9 +6,32 @@
     <title>Manual allocation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+      <style>
+        body, html {
+          height: 100%;
+          margin: 0;
+        }
+
+        .container{
+            text-align: center;
+        }
+
+        .image{
+            display: block;
+            width: 80%;
+            height: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            object-fit: cover;
+        }
+
+        .button{
+            margin: 10px;
+        }
+        </style>
   </head>
   <body>
-  <section class="section">
+  <!--<section class="section">-->
     <div class="container">
       <h1 class="title">
         Manual Allocation
@@ -16,10 +39,20 @@
       <p class="subtitle">
         To determine <strong>Hotel</strong> or not!
       </p>
-      <figure class="image is-4by3">
+      <figure class="image">
         <img src="media{{ img_paths }}">
       </figure>
+
+      <form action="" method="post" accept-charset="utf-8">
+          <button class="button is-danger" type="submit" value="0">
+              <- Not hotel
+          </button>
+          <button class="button is-primary" type="submit" value="1">
+              Hotel ->
+          </button>
+      </form>
+
     </div>
-  </section>
+  <!--</section>-->
   </body>
 </html>

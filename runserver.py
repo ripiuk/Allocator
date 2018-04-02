@@ -18,6 +18,7 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 full_media_path = '{}/media/'.format(base_dir)
 app['media_files'] = ['{}/{}'.format(subdirs or '', name) for path, subdirs, files
                       in os.walk(full_media_path) for name in files]
+app['image_number'] = 0
 
 for route in routes:
     app.router.add_route(route[0], route[1], route[2], name=route[3])
