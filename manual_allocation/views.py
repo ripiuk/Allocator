@@ -1,3 +1,4 @@
+import json
 from aiohttp import web
 import aiohttp_jinja2
 
@@ -13,6 +14,7 @@ class Allocate(web.View):
     async def get(self):
         return {'images': self.request.app['media_files']}
 
-    @aiohttp_jinja2.template('allocate.html')
+    @aiohttp_jinja2.template('save.html')
     async def post(self):
-        pass
+        data = await self.request.post()
+        print(data)

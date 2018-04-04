@@ -29,7 +29,7 @@
         margin: 10px;
       }
 
-      .button_panel{
+      .buttons_panel{
         position: fixed;
         height: 55px;
         bottom: 0px;
@@ -37,6 +37,7 @@
         right: 0px;
         margin-bottom: 0px;
       }
+
       .choose{
         width: 150px;
       }
@@ -63,15 +64,30 @@
         document.getElementById("save").classList.remove("is-active");
       };
 
-      function change_image(){
-        image_index++;
-        if (image_index >= image_list_length){
+      function change_image(element){
+        if (image_index >= (image_list_length - 1)){
           open_modal();
           return;
         };
+        result[image_list[image_index]] = element.value;
+        image_index++;
         document.getElementById("image_holder").src='media'+image_list[image_index];
         update_image_left();
       };
+
+      function save_result(){
+        form = document.getElementById('save_form')
+
+        for (key in result) {
+          // alert('key: ' + key + ', value:' + result[key]); // debug
+          var hiddenField = document.createElement("input");
+          hiddenField.setAttribute("type", "hidden");
+          hiddenField.setAttribute("name", key);
+          hiddenField.setAttribute("value", result[key]);
+          form.appendChild(hiddenField);
+        }
+        document.body.appendChild(form);
+      }
     </script>
   </head>
   <body>
@@ -86,20 +102,11 @@
 
       <img src="media{{ images[0] }}" id="image_holder">
 
-      <!--<form action="" method="post" accept-charset="utf-8">-->
-          <!--<button class="button is-danger" type="submit" id="not_hotel" onclick="change_image();">-->
-              <!--<- Not hotel-->
-          <!--</button>-->
-          <!--<button class="button is-primary" type="submit" id="is_hotel">-->
-              <!--Hotel ->-->
-          <!--</button>-->
-      <!--</form>-->
-
-      <div class="button_panel">
-        <button class="button is-danger choose" type="submit" id="not_hotel" onclick="change_image();">
+      <div class="buttons_panel">
+        <button class="button is-danger choose" type="submit" value="0" id="not_hotel" onclick="change_image(this);">
           <- Not hotel
         </button>
-        <button class="button is-success choose" type="submit" id="is_hotel" onclick="change_image();">
+        <button class="button is-success choose" type="submit" value="1" id="is_hotel" onclick="change_image(this);">
           Hotel ->
         </button>
       </div>
@@ -115,8 +122,10 @@
               <p>You have sorted all the images. <br>After saving, you can see the mapping in the result.csv file.</p>
             </section>
             <footer class="modal-card-foot">
-              <button class="button is-success">Save changes</button>
-              <button class="button" onclick="close_modal();">Cancel</button>
+              <form method="post" id="save_form">
+                <button class="button is-success" onclick="save_result();">Save changes</button>
+              </form>
+              <button class="button" type="submit" onclick="close_modal();">Cancel</button>
             </footer>
           </div>
         </div>
