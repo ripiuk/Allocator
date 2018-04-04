@@ -1,6 +1,5 @@
-from manual_allocation.views import Allocate, SaveAllocation
+from manual_allocation.views import Allocate
 
 routes = [
     ('*', '/', Allocate, 'allocate'),
-    ('*', '/save', SaveAllocation, 'save')
 ]

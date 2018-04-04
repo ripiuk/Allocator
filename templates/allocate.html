@@ -6,53 +6,122 @@
     <title>Manual allocation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-      <style>
-        body, html {
-          height: 100%;
-          margin: 0;
-        }
+    <style>
+      body, html {
+        height: 100%;
+        margin: 0;
+      }
 
-        .container{
-            text-align: center;
-        }
+      .container{
+        text-align: center;
+      }
 
-        .image{
-            display: block;
-            width: 80%;
-            height: 80%;
-            margin-left: auto;
-            margin-right: auto;
-            object-fit: cover;
-        }
+      #image_holder{
+        display: block;
+        width: 80%;
+        height: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        object-fit: cover;
+      }
 
-        .button{
-            margin: 10px;
-        }
-        </style>
+      .button{
+        margin: 10px;
+      }
+
+      .button_panel{
+        position: fixed;
+        height: 55px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        margin-bottom: 0px;
+      }
+      .choose{
+        width: 150px;
+      }
+    </style>
+    <script type="text/javascript">
+      var image_index = 0;
+      var image_list = {{images|safe}};
+      var image_list_length = image_list.length
+      var result = {};
+
+      function update_image_left(){
+        document.getElementById('image_left').innerHTML = 'image '+ String(image_index + 1) + '/' + String(image_list_length);
+      };
+
+      window.onload = function(){
+        update_image_left();
+      };
+
+      function open_modal(){
+        document.getElementById("save").classList.add("is-active");
+      };
+
+      function close_modal(){
+        document.getElementById("save").classList.remove("is-active");
+      };
+
+      function change_image(){
+        image_index++;
+        if (image_index >= image_list_length){
+          open_modal();
+          return;
+        };
+        document.getElementById("image_holder").src='media'+image_list[image_index];
+        update_image_left();
+      };
+    </script>
   </head>
   <body>
-  <!--<section class="section">-->
+  <section class="section">
     <div class="container">
       <h1 class="title">
         Manual Allocation
       </h1>
       <p class="subtitle">
-        To determine <strong>Hotel</strong> or not!
+        To determine <strong>Hotel</strong> or not! <span id="image_left" class="tag is-info"></span>
       </p>
-      <figure class="image">
-        <img src="media{{ img_paths }}">
-      </figure>
 
-      <form action="" method="post" accept-charset="utf-8">
-          <button class="button is-danger" type="submit" value="0">
-              <- Not hotel
-          </button>
-          <button class="button is-primary" type="submit" value="1">
-              Hotel ->
-          </button>
-      </form>
+      <img src="media{{ images[0] }}" id="image_holder">
+
+      <!--<form action="" method="post" accept-charset="utf-8">-->
+          <!--<button class="button is-danger" type="submit" id="not_hotel" onclick="change_image();">-->
+              <!--<- Not hotel-->
+          <!--</button>-->
+          <!--<button class="button is-primary" type="submit" id="is_hotel">-->
+              <!--Hotel ->-->
+          <!--</button>-->
+      <!--</form>-->
+
+      <div class="button_panel">
+        <button class="button is-danger choose" type="submit" id="not_hotel" onclick="change_image();">
+          <- Not hotel
+        </button>
+        <button class="button is-success choose" type="submit" id="is_hotel" onclick="change_image();">
+          Hotel ->
+        </button>
+      </div>
+
+      <div class="modal" id="save">
+        <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Save images mapping</p>
+              <button class="delete" aria-label="close" onclick="close_modal();"></button>
+            </header>
+            <section class="modal-card-body">
+              <p>You have sorted all the images. <br>After saving, you can see the mapping in the result.csv file.</p>
+            </section>
+            <footer class="modal-card-foot">
+              <button class="button is-success">Save changes</button>
+              <button class="button" onclick="close_modal();">Cancel</button>
+            </footer>
+          </div>
+        </div>
 
     </div>
-  <!--</section>-->
+  </section>
   </body>
 </html>
