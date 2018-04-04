@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-  Saved
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Saved{% endblock %}
+{% block include %}
+<link rel="stylesheet" href="{{ app.router.static.url_for(filename='css/save.css') }}">
+{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        The mapping was saved in the result.json file
+      </h1>
+    </div>
+  </section>
+{% endblock %}

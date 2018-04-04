@@ -1,5 +1,7 @@
-from manual_allocation.views import Allocate
+from manual_allocation.views import Allocate, Save
 
 routes = [
-    ('*', '/', Allocate, 'allocate'),
+    ('GET', '/', Allocate, 'allocate'),
+    ('POST', '/', Allocate, 'save_allocate'),
+    ('GET', '/saved', Save, 'save'),
 ]

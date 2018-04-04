@@ -1,106 +1,22 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Manual allocation</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <style>
-      body, html {
-        height: 100%;
-        margin: 0;
-      }
+{% extends "base.html" %}
 
-      .container{
-        text-align: center;
-      }
+{% block title %}Manual allocator{% endblock %}
+{% block include %}
+<link rel="stylesheet" href="{{ app.router.static.url_for(filename='css/allocate.css') }}">
+<script type="text/javascript">{% include "js/allocate.js" %}</script>
+{% endblock %}
 
-      #image_holder{
-        display: block;
-        width: 80%;
-        height: 80%;
-        margin-left: auto;
-        margin-right: auto;
-        object-fit: cover;
-      }
-
-      .button{
-        margin: 10px;
-      }
-
-      .buttons_panel{
-        position: fixed;
-        height: 55px;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        margin-bottom: 0px;
-      }
-
-      .choose{
-        width: 150px;
-      }
-    </style>
-    <script type="text/javascript">
-      var image_index = 0;
-      var image_list = {{images|safe}};
-      var image_list_length = image_list.length
-      var result = {};
-
-      function update_image_left(){
-        document.getElementById('image_left').innerHTML = 'image '+ String(image_index + 1) + '/' + String(image_list_length);
-      };
-
-      window.onload = function(){
-        update_image_left();
-      };
-
-      function open_modal(){
-        document.getElementById("save").classList.add("is-active");
-      };
-
-      function close_modal(){
-        document.getElementById("save").classList.remove("is-active");
-      };
-
-      function change_image(element){
-        if (image_index >= (image_list_length - 1)){
-          open_modal();
-          return;
-        };
-        result[image_list[image_index]] = element.value;
-        image_index++;
-        document.getElementById("image_holder").src='media'+image_list[image_index];
-        update_image_left();
-      };
-
-      function save_result(){
-        form = document.getElementById('save_form')
-
-        for (key in result) {
-          // alert('key: ' + key + ', value:' + result[key]); // debug
-          var hiddenField = document.createElement("input");
-          hiddenField.setAttribute("type", "hidden");
-          hiddenField.setAttribute("name", key);
-          hiddenField.setAttribute("value", result[key]);
-          form.appendChild(hiddenField);
-        }
-        document.body.appendChild(form);
-      }
-    </script>
-  </head>
-  <body>
+{% block body %}
   <section class="section">
     <div class="container">
       <h1 class="title">
-        Manual Allocation
+        Manual Allocator
       </h1>
       <p class="subtitle">
         To determine <strong>Hotel</strong> or not! <span id="image_left" class="tag is-info"></span>
       </p>
 
-      <img src="media{{ images[0] }}" id="image_holder">
+      <img src="{{ images[0] }}" id="image_holder">
 
       <div class="buttons_panel">
         <button class="button is-danger choose" type="submit" value="0" id="not_hotel" onclick="change_image(this);">
@@ -119,7 +35,7 @@
               <button class="delete" aria-label="close" onclick="close_modal();"></button>
             </header>
             <section class="modal-card-body">
-              <p>You have sorted all the images. <br>After saving, you can see the mapping in the result.csv file.</p>
+              <p>You have sorted all the images. <br>After saving, you can see the mapping in the result.json file.</p>
             </section>
             <footer class="modal-card-foot">
               <form method="post" id="save_form">
@@ -132,5 +48,4 @@
 
     </div>
   </section>
-  </body>
-</html>
+{% endblock %}

@@ -3,4 +3,4 @@ venv
 .cache/
 *__pycache__/
 media
-result.csv
+result.json
