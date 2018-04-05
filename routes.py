@@ -4,4 +4,5 @@ routes = [
     ('GET', '/', Allocate, 'allocate'),
     ('POST', '/', Allocate, 'save_allocate'),
     ('GET', '/saved', Save, 'save'),
+    ('POST', '/saved', Save, 'distribute'),
 ]
