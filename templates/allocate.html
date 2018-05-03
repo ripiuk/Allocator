@@ -13,18 +13,17 @@
         Manual Allocator
       </h1>
       <p class="subtitle">
-        To determine <strong>Hotel</strong> or not! <span id="image_left" class="tag is-info"></span>
+        To <strong>classify</strong> your images <span id="image_left" class="tag is-info"></span>
       </p>
 
       <img src="{{ images[0] }}" id="image_holder">
 
       <div class="buttons_panel">
-        <button class="button is-danger choose" type="submit" value="0" id="not_hotel" onclick="change_image(this);">
-          <- Not hotel
-        </button>
-        <button class="button is-success choose" type="submit" value="1" id="is_hotel" onclick="change_image(this);">
-          Hotel ->
-        </button>
+        {% for button in buttons.values() %}
+          <button class="button is-danger choose" type="submit" value="{{ button }}" onclick="change_image(this);">
+            {{ button }}
+          </button>
+        {% endfor %}
       </div>
 
       <div class="modal" id="save">

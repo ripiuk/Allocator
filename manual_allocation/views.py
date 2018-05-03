@@ -10,6 +10,16 @@ async def redirect(request, router_name):
     raise web.HTTPFound(url)
 
 
+class Tune(web.View):
+    @aiohttp_jinja2.template('tune.html')
+    async def get(self):
+        pass
+
+    @aiohttp_jinja2.template('tune.html')
+    async def post(self):
+        pass
+
+
 class Allocate(web.View):
 
     @aiohttp_jinja2.template('allocate.html')
@@ -19,7 +29,7 @@ class Allocate(web.View):
             path.split('media')[-1] if path.split('media')[-1] != '/' else '', name)
             for path, subdirs, files in os.walk(self.request.app['base_dir']) for name in files]
 
-        return {'images': self.request.app['media_files']}
+        return {'images': self.request.app['media_files'], 'buttons': {0: 'No', 1: 'Yes'}}
 
     @aiohttp_jinja2.template('allocate.html')
     async def post(self):
@@ -44,7 +54,7 @@ class Save(web.View):
         base_dir = os.path.abspath(os.path.join(self.request.app['base_dir'], '..'))
 
         for path, prefix in data.items():
-            destination_path = '{base}/{media_dir}/res_{prefix}/{file}'.format(
+            destination_path = '{base}/{media_dir}/results/{prefix}/{file}'.format(
                 base=base_dir, media_dir='media', prefix=prefix, file=os.path.basename(path))
             if not os.path.exists(os.path.dirname(destination_path)):
                 os.makedirs(os.path.dirname(destination_path))
