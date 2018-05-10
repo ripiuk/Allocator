@@ -20,6 +20,7 @@
 
       <div class="buttons_panel">
         {% for button in buttons.values() %}
+          <!-- TODO: Add flexibility to the buttons -->
           <button class="button is-danger choose" type="submit" value="{{ button }}" onclick="change_image(this);">
             {{ button }}
           </button>

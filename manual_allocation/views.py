@@ -11,33 +11,40 @@ async def redirect(request, router_name):
 
 
 class Tune(web.View):
+
     @aiohttp_jinja2.template('tune.html')
     async def get(self):
         pass
 
-    @aiohttp_jinja2.template('tune.html')
     async def post(self):
-        pass
+        path = '/allocating'
+        response = web.HTTPFound(path)
+        data = await self.request.post()
+        response.set_cookie(name='buttons', value=json.dumps(dict(data), ensure_ascii=False), path=path)
+        return response
 
 
 class Allocate(web.View):
 
     @aiohttp_jinja2.template('allocate.html')
     async def get(self):
+        buttons = json.loads(self.request.cookies.get('buttons', '{"1": "No", "2": "Yes"}'))
         # update the list of media files every time
         self.request.app['media_files'] = ['media{}/{}'.format(
             path.split('media')[-1] if path.split('media')[-1] != '/' else '', name)
             for path, subdirs, files in os.walk(self.request.app['base_dir']) for name in files]
 
-        return {'images': self.request.app['media_files'], 'buttons': {0: 'No', 1: 'Yes'}}
+        return {'images': self.request.app['media_files'], 'buttons': buttons}
 
-    @aiohttp_jinja2.template('allocate.html')
     async def post(self):
+        router_name = 'save'
+        response = web.HTTPFound(self.request.app.router[router_name].url_for())
         data = await self.request.post()
+
         with open('result.json', 'w+', encoding='utf8') as file:
             json.dump(dict(data), file, ensure_ascii=False)
 
-        await redirect(self.request, 'save')
+        return response
 
 
 class Save(web.View):
@@ -46,8 +53,10 @@ class Save(web.View):
     async def get(self):
         pass
 
-    @aiohttp_jinja2.template('save.html')
     async def post(self):
+        response = web.HTTPFound('/')
+        response.del_cookie('buttons', path='/allocating')
+
         with open('result.json', 'r', encoding='utf8') as file:
             data = json.loads(file.readline())
 
@@ -59,5 +68,6 @@ class Save(web.View):
             if not os.path.exists(os.path.dirname(destination_path)):
                 os.makedirs(os.path.dirname(destination_path))
             os.rename('{base}/{in_media}'.format(base=base_dir, in_media=path), destination_path)
+        # TODO: delete all empty dirs
 
-        await redirect(self.request, 'allocate')
+        return response
